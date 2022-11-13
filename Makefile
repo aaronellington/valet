@@ -63,5 +63,5 @@ docker: clean
 	docker build -t aaronellington/valet .
 
 ## Publish the docker image
-docker-publish: clean
+docker-publish: clean docker
 	docker push aaronellington/valet

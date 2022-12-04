@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -20,10 +19,10 @@ type Config struct {
 type App struct {
 	config  Config
 	runtime *forge.Runtime
-	logger  forge.Logger
+	logger  *forge.Logger
 }
 
-func (app *App) Logger() forge.Logger {
+func (app *App) Logger() *forge.Logger {
 	return app.logger
 }
 
@@ -47,7 +46,7 @@ func (app *App) Handler() http.Handler {
 	}
 
 	return &forge.HTTPLogger{
-		Logger:  app.logger,
+		Logger:  app.logger.Copy("http"),
 		Handler: static,
 	}
 }
@@ -78,9 +77,7 @@ func main() {
 	app := &App{
 		runtime: runtime,
 		config:  config,
-		logger: &forge.LoggerJSON{
-			Encoder: json.NewEncoder(runtime.Stdout),
-		},
+		logger:  forge.NewLogger("app", runtime.Stdout, nil),
 	}
 
 	if err := forge.Run(context.Background(), app); err != nil {

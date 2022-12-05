@@ -6,7 +6,7 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/kyberbits/forge"
+	"github.com/kyberbits/forge/forge"
 )
 
 type Config struct {
@@ -80,7 +80,7 @@ func main() {
 		logger:  forge.NewLogger("app", runtime.Stdout, nil),
 	}
 
-	if err := forge.Run(context.Background(), app); err != nil {
+	if err := runtime.Serve(context.Background(), app); err != nil {
 		panic(err)
 	}
 }
